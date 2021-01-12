@@ -1,0 +1,116 @@
+---
+title: "R Syntax and Style"
+output:
+  html_document:
+    df_print: paged
+---
+
+This is going to be more verbose than my typical labs because I want you to be able to reference this document in the future.
+
+# Lab Stuff
+You don't have to come to this one every week, in fact I encourage you to mix it up because Molly, Professor Levy, and I all have slightly different styles and expertise. 
+
+Your attendence is automatically recorded in Zoom, so you don't need to let me know you're here or anything. That also means that I will know how long you spent in the lab and what time you came and went. In order to be marked present, you need to be here for the lab portion, which occurs in the first 15 minutes or so. 
+
+Please let me know if I don't mark you present and you are present, but know that I won't always update that after every week. 
+
+I often don't see questions in the chat while I'm looking at the lab so please interrupt me with questions or comments. 
+
+You should have your mic muted unless speaking, and while I would prefer that you have your video on, I understand if you choose not to for whatever reason. 
+
+# Grading Stuff
+You'll receive grades on your files in Github and in Canvas. If those are inconsitent, please let me know. 
+
+Please also let me know if you think I graded something unfairly, inconsistently, or incorrectly. I will consider all regrade requests, but please have a good reason. 
+
+A good reason would be "You marked me down for this in homework 1 and homework 2 but I didn't get the feedback from homework 1 in time to incorporate it into homework 2."
+
+A bad reason would be "I feel that my work deserves at least an 80% because I know that it was very good. "
+
+# Code Stuff
+This quarter the expectation is that you are able to complete the assignment successfully and you do it using good R style. To that end, this first lecture will hopefully get you up to speed with some of the basics. Up to 20% of your grade on assignments will be associated with your style.
+
+##  Naming Conventions
+Traditional R Naming conventions:
+ * alllowercase e.g. statedf
+ * period.separated e.g. state.df
+ * underscore_separated e.g. state_df
+ * lowerCamelCase e.g. stateDF
+ * UpperCamelCase e.g. StateDF
+ 
+You can choose any naming convention from the list above, but be consistent about it. I will typically use underscore_separated as that's the preference in Python.
+
+ * Variable names should be nouns e.g. df
+ * Function names should be verbs e.g. mutate
+ 
+ * File names MUST end with .R or will be marked down
+ 
+ * If you use local variables or functions, they should be all in lower case and use the period.separated syntax e.g. do.call
+ 
+Use meaningful names for functions and variables. Single letter variables will be penalized. 
+
+## Code Organization
+I suggest that you write your functions in a separate file and source it. That way your main script is very clear and linear without functions strewn all over the place. For example,
+
+```{r}
+# hw1.R
+####################
+# Main driver code #
+####################
+
+source("hw1_helper_functions.R")
+
+greet('Hello', 'everybody')
+
+# mtcars analysis plot
+mtcars_dist_plot <- plot_mtcars()
+mtcars_dist_plot
+
+```
+Note that the above code assumes that I'm currently running this code from the same directory as my helper functions file is in. That's a fair assumption, because we as TAs will download your entire Github repo, so please do not use absolute paths because then we will have to change all of them to make your code work.
+
+Don't use excessively long lines of code if you can avoid it. Being expressive and understandable is more important than being efficient in this course.
+
+## Tidyverse vs. Base R
+
+I believe that both are OK. I personally find the magrittr syntax to be a bit easier to read, but I learned base R before moving to tidyverse, so you may notice that my tendency is to use base R tools. 
+
+## Performativity
+
+We're not particularly concerned with the efficiency of your code unless otherwise specified in this course. Ideally we would like to minimize the use of deeply nested loops and such, but such things might be necessary, say when working in NLP. 
+
+Apply statements e.g. lapply, sapply, rapply, mapply, are preferred over for loops, but again you won't be marked down for using a for loop unless otherwise told. 
+
+## Code Samples
+
+Write code you're proud of, write code you want to show potential employers to demonstrate your abilities. The assignments in this course are meant to be applicable to what it's like to work as a research assistant / associate, so if you're interested in those sorts of positions, this is a great opportunity to develop your technical skills and get something to show for it.
+
+# Course Stuff
+## Statements on Expectations
+Some of this has been said by Professor Levy, but I feel that it may be valuable to reiterate. The expectation in this course is that you go above and beyond the code presented to you in lecture. You may use it freely if you wish, but if your solution to a homework copies or substantially borrows from code shown to you in lab or lecture, you will be marked down for it as it does not constitute your work. 
+
+It is imperative that you start early on assignments. There are few things more frustrating than knowing how to solve a problem and not having time. 
+
+Things that you need to use and if you don't you will be penalized:
+ * Functions
+ * Comments
+    * Comment on any line that you feel is unclear
+    * Comment on every function explaining what it does
+    * Outline the general control flow of your code
+ * Cite your sources
+    * No need to cite lecture code but cite lab
+    * If you reference a site then include the URL of the site
+ 
+Be sure to fully read the questions that Professor Levy asks you to respond to after you finish your assignment. 
+
+There is no "right" way on the homework assignments. Sometimes there is a right answer, but there are many correct ways to arrive at that answer. Sometimes there is no right answer, and in that case we are looking to see your best work. If it really is your best work, then it will receive high marks. If you ever have a question about the expectations on an assignment, please ask TAs or Professor Levy, don't assume.
+
+## Debugging, Documentation, and Googling
+
+If you have a question, Google it! If you have an error, copy your error into your search bar and Google it. Chances are someone has had the same question before.  So much of programming is being good at solving your own problems using the internet's help. But do remember that you can't use solutions that substantively solve the problem you're being asked to solve (e.g. you can't copy and paste the code from Stackoverflow where they create the plot you're being asked to create in your assignment). You also need to cite every site you use in your solution. 
+
+Read the documentation!! Use ?function and ??function!! They're so helpful!
+
+```{r}
+?library
+```

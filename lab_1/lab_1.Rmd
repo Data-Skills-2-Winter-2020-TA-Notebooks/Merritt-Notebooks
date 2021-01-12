@@ -30,13 +30,18 @@ A bad reason would be "I feel that my work deserves at least an 80% because I kn
 # Code Stuff
 This quarter the expectation is that you are able to complete the assignment successfully and you do it using good R style. To that end, this first lecture will hopefully get you up to speed with some of the basics. Up to 20% of your grade on assignments will be associated with your style.
 
+## Style and Formatting
+Use the [tidyverse style guide](https://style.tidyverse.org/) as a guide when you're not sure how to style your code.
+
+We care about and may grade down for formatting, but the focus of this class is on substance, not style. 
+
 ##  Naming Conventions
 Traditional R Naming conventions:
- * alllowercase e.g. statedf
- * period.separated e.g. state.df
- * underscore_separated e.g. state_df
- * lowerCamelCase e.g. stateDF
- * UpperCamelCase e.g. StateDF
+  *alllowercase e.g. statedf
+  *period.separated e.g. state.df
+  *underscore_separated e.g. state_df
+  *lowerCamelCase e.g. stateDF
+  *UpperCamelCase e.g. StateDF
  
 You can choose any naming convention from the list above, but be consistent about it. I will typically use underscore_separated as that's the preference in Python.
 
@@ -67,7 +72,9 @@ mtcars_dist_plot <- plot_mtcars()
 mtcars_dist_plot
 
 ```
-Note that the above code assumes that I'm currently running this code from the same directory as my helper functions file is in. That's a fair assumption, because we as TAs will download your entire Github repo, so please do not use absolute paths because then we will have to change all of them to make your code work.
+Note that the above code assumes that I'm currently running this code from the same directory as my helper functions file is in. That's a fair assumption, because we as TAs will download your entire Github repo, so please do not use absolute paths because then we will have to change all of them to make your code work. 
+
+You don't have to use functions at all, but it will lead to more succinct, simple code.
 
 Don't use excessively long lines of code if you can avoid it. Being expressive and understandable is more important than being efficient in this course.
 
@@ -91,15 +98,10 @@ Some of this has been said by Professor Levy, but I feel that it may be valuable
 
 It is imperative that you start early on assignments. There are few things more frustrating than knowing how to solve a problem and not having time. 
 
-Things that you need to use and if you don't you will be penalized:
- * Functions
- * Comments
-    * Comment on any line that you feel is unclear
-    * Comment on every function explaining what it does
-    * Outline the general control flow of your code
- * Cite your sources
-    * No need to cite lecture code but cite lab
-    * If you reference a site then include the URL of the site
+#Citations
+Cite your sources
+  * No need to cite lecture code but cite lab
+  * If you reference a site then include the URL of the site
  
 Be sure to fully read the questions that Professor Levy asks you to respond to after you finish your assignment. 
 
@@ -117,3 +119,4 @@ Read the documentation!! Use ?function and ??function!! They're so helpful!
 
 ## Git
 We will also consider your use of Git in your grade. You should commit to your Git repository numerous times as you work on your assignments, and each commit should have a meaningful message attached to it.
+

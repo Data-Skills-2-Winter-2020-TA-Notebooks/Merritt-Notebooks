@@ -5,7 +5,9 @@ output:
     df_print: paged
 ---
 
-This is going to be more verbose than my typical labs because I want you to be able to reference this document in the future.
+This is going to be more verbose than my typical labs because I want you to be able to reference this document in the future. 
+
+# Personal Intro
 
 # Lab Stuff
 You don't have to come to this one every week, in fact I encourage you to mix it up because Molly, Professor Levy, and I all have slightly different styles and expertise. 

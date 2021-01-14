@@ -28,7 +28,7 @@ A good reason would be "You marked me down for this in homework 1 and homework 2
 A bad reason would be "I feel that my work deserves at least an 80% because I know that it was very good. "
 
 # Code Stuff
-This quarter the expectation is that you are able to complete the assignment successfully and you do it using good R style. To that end, this first lecture will hopefully get you up to speed with some of the basics. Up to 20% of your grade on assignments will be associated with your style.
+This quarter the expectation is that you are able to complete the assignment successfully and you do it using good R style. To that end, this first lecture will hopefully get you up to speed with some of the basics. 
 
 ## Style and Formatting
 Use the [tidyverse style guide](https://style.tidyverse.org/) as a guide when you're not sure how to style your code.
@@ -98,10 +98,10 @@ Some of this has been said by Professor Levy, but I feel that it may be valuable
 
 It is imperative that you start early on assignments. There are few things more frustrating than knowing how to solve a problem and not having time. 
 
-#Citations
+# Citations
 Cite your sources
-  * No need to cite lecture code but cite lab
-  * If you reference a site then include the URL of the site
+  *No need to cite lecture code but cite lab
+  *If you reference a site then include the URL of the site
  
 Be sure to fully read the questions that Professor Levy asks you to respond to after you finish your assignment. 
 

@@ -1,0 +1,28 @@
+---
+title: "Cleaning Dirty Data"
+output: html_notebook
+---
+# Import Packages
+```{r}
+library(readxl)
+```
+
+# Read in Data
+```{r}
+df_path <- file.path('data', 'bti.xlsx')
+df <- read_excel(df_path)
+```
+
+```{r}
+View(df)
+```
+
+The columns are poorly named, and I don't want many of them, since many are empty, or meaningful in an Excel format but not for our purposes. Things like trend arrows and what have you don't translate to a dataframe. 
+
+I also want to, in the end, have the country name as the index of this data, and I don't want any columns or rows where all the data are missing. 
+
+Let's begin with the columns renaming, as that will make explicitly dropping some of them easier later on. 
+
+```{r}
+
+```

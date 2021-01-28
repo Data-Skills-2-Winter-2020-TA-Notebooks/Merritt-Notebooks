@@ -1,0 +1,88 @@
+---
+title: 'Lab 3: Spatial Data'
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+library(spdplyr)
+library(sf)
+library(spData)
+library(geojsonio)
+library(rgdal)
+library(tidyverse)
+```
+# A Real World Example
+I recently started working for the Mansueto Institute as a research engineer on the Million Neighbourhoods Project. We're trying to process maps of every single rapidly developing country to suggest new streets to help the people who live in improvised settlements get access to public services. 
+
+We take in data from multiple sources, including administrative boundaries, natural boundaries like rivers or coastlines, roads, and buildings to A. split the world into "blocks", B. quantify the degree to which the block is an unplanned settlement, then C. suggest new streets that would give all the residents street access. 
+
+[Here](https://millionneighborhoods.org/#2/8.84/17.54) is a visualization of the work.
+
+The data we take in is in the form of geojsons. JSON stands for JavaScript Object Notation. A GeoJSON is standardized data format that generally conforms to the JSON standards with some additional specifications.
+
+Today I'll show you some toy data we use and work with a bit. 
+
+A quick word of warning-- many of the tools you'll use to work with geospatial data are built on top of C / C++, so there's a lot of translation issues you can run into that you may not understand. Start early. 
+
+```{r}
+files <- c('buildings_DJI.1.1_1.geojson', 'lines_DJI.1.1_1.geojson', 'parcels_DJI.1.1_1.geojson')
+sps <- vector(mode = 'list', length = length(files))
+for (file_num in seq(files)){
+  sp_version <- geojsonio::geojson_read(file.path('data', files[file_num]), what = 'sp')
+  sps[[file_num]] <- sp_version
+  plot(sp_version)
+  par(new=TRUE)
+}
+```
+What issue would I have if I inverted the order here, other than the fact that the 'add' argument would give me an error? How would the plot look different?
+```{r}
+plot(sps[[2]], col = 'grey')
+plot(sps[[1]], col = 'black', add = TRUE)
+text(x = c(42.72, 42.9, 42.93), y = c(11.1, 11.08, 11.27), labels = c('Ali Sabieh', 'Ali Adde', 'Holhol'))
+```
+This is still just a start. There are many better ways to create labels. Can you name a few?
+
+Let's view just Ali Sabieh. Something to think about, how could I generalize this code beyond Ali Sabieh, to subset my dataframes to any particular location?
+
+```{r}
+for (file_num in seq(sps[-3])){
+    bbox <- matrix(data=c(42.7, 11.125, 42.725, 11.175), nrow = 2, ncol = 2, dimnames = list(c('x', 'y'), c('min', 'max')))
+    ali_sabieh_spdf <- sps[[file_num]]
+    ali_sabieh_spdf@bbox <- bbox
+    if (file_num == 1){
+        plot(ali_sabieh_spdf, col = 'black')
+    }
+    else{plot(ali_sabieh_spdf, col = 'grey', add = TRUE)}
+}
+```
+This gives us a better sense of the scale we're working on. Even when we've zoomed in so much, we still only see dots. Let's zoom in even more to look at an improvised settlement. 
+
+```{r}
+for (file_num in seq(sps[-3])){
+  bbox <- matrix(data=c(42.705, 11.15, 42.715, 11.158), nrow = 2, ncol = 2, dimnames = list(c('x', 'y'), c('min', 'max')))
+  ali_sabieh_spdf <- sps[[file_num]]
+  ali_sabieh_spdf@bbox <- bbox
+  if (file_num == 1){
+    plot(ali_sabieh_spdf, col = 'black')
+  }
+  else{plot(ali_sabieh_spdf, col = 'grey', add = TRUE)}
+}
+```
+Check out [this page](https://geocompr.github.io/geocompkg/articles/tidyverse-pitfalls.html) for some things to avoid when working with spatial data in Tidyverse.
+
+Now we will add in our Voronoi diagram:
+```{r}
+for (file_num in seq(sps)){
+  bbox <- matrix(data=c(42.705, 11.15, 42.715, 11.158), nrow = 2, ncol = 2, dimnames = list(c('x', 'y'), c('min', 'max')))
+  ali_sabieh_spdf <- sps[[file_num]]
+  ali_sabieh_spdf@bbox <- bbox
+  if (file_num == 1){
+    plot(ali_sabieh_spdf, col = 'black')
+  }
+  else{plot(ali_sabieh_spdf, col = 'grey', add = TRUE)}
+}
+```
+
+The Voronoi is a way to optimally partition the houses. The lines that form the Voronoi diagram are the "candidate roads". 

@@ -1,14 +1,17 @@
 ---
 title: "Cleaning Dirty Data"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 # Import Packages
-```{r}
+```{r, imports}
 library(readxl)
+library(tidyverse)
 ```
 
 # Read in Data
-```{r}
+```{r, read_in}
 df_path <- file.path('data', 'bti.xlsx')
 df <- read_excel(df_path)
 ```
@@ -19,10 +22,60 @@ View(df)
 
 The columns are poorly named, and I don't want many of them, since many are empty, or meaningful in an Excel format but not for our purposes. Things like trend arrows and what have you don't translate to a dataframe. 
 
-I also want to, in the end, have the country name as the index of this data, and I don't want any columns or rows where all the data are missing. 
+In the end, I would like to have clean, readable variable names, and no columns or rows where all the data is missing. 
 
 Let's begin with the columns renaming, as that will make explicitly dropping some of them easier later on. 
+```{r, rename_cols}
+rename_columns <- function(df) {
+  new_names <- character(length(names(df)))
+  for (col_index in seq(names(df))){
+    split_name <- strsplit(names(df)[col_index], '| ', fixed = TRUE)[[1]]
+    if (length(split_name) == 1){
+      new_name <- split_name[1]
+    }
+    else{
+      new_name <- split_name[2]
+    }
+    new_name <- stringr::str_trim(new_name, side='both')
+    print(new_name)
+    new_names[col_index] <- new_name
+  }
+  return(new_names)
+}
 
-```{r}
+names(df) <- rename_columns(df)
+```
 
+Our column names are a bit more readable without the crud in front of them. We still have columns that are empty, or are filled with encoding errors. Let's now get rid of those. 
+
+```{r, remove_cols}
+df <- df[, which(unlist(lapply(df, function(x) !all(is.na(x)))))]
+```
+
+```{r, remove_more_cols}
+# df <- df %>%
+#   select(-starts_with('..'))
+```
+
+I can't use the tidyverse functions because my columns aren't uniquely named! Let's get rid of the duplicates
+
+```{r, remove_duplicate_names}
+df <- df[, !duplicated(colnames(df))]
+```
+
+```{r, remove_bad_cols}
+df <- df %>%
+  select(-starts_with('..'))
+```
+
+Finally, we have some column names that end in '..' for some reason. I still want that data, so I'll just rename the columns a bit.
+
+
+```{r, fix_column_endings}
+names(df) <- gsub('\\.\\.', '', names(df))
+```
+
+The first column is weirdly named because of a previous cleanup attempt. I'll edit that one directly. It's the list of countries, so I'll name it "Country".
+```{r, fix_first_col}
+df <- rename(df, Country = 'East-Central and Southeast Europe\r\n2')
 ```

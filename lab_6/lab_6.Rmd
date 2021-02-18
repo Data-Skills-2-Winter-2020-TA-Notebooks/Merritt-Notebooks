@@ -1,0 +1,112 @@
+---
+title: "NLP with Pitchfork Reviews"
+output:
+  html_document:
+    df_print: paged
+---
+
+For this lab, we're roughly following along with the user guide linked below, using our own data.
+
+http://text2vec.org/vectorization.html
+
+```{r}
+library(tidyverse)
+library(syuzhet)
+library(SnowballC)
+library(text2vec)
+library(glmnet)
+```
+
+```{r}
+df <- read_csv('p4kreviews.csv')
+```
+
+```{r}
+df <- tidyr::separate(df, date, c('Month', 'Day', 'Year'), sep = ' ')
+```
+
+```{r}
+distplot <- function(diff_var, df, histogram = FALSE){
+  df['factor'] <- factor(pull(df[diff_var]))
+  p <- ggplot(df, aes_string(x="score", colour='factor'))
+  if (histogram){
+    p <- p + geom_histogram(binwidth = 0.1, position = 'dodge', alpha = 0.5)
+  }
+  else{
+    p <- p + 
+      geom_density() +
+      facet_grid(factor ~ .)
+  }
+  p
+}
+```
+
+```{r}
+distplot('best', df, histogram = TRUE)
+distplot('genre', df)
+distplot('Month', df)
+```
+# View the text
+
+```{r}
+index <- sample(1:length(df), 1)
+review <- pull(df[index,'review'])
+review
+```
+
+```{r}
+df['review'] <- iconv(df$review, from = 'cp1252', to = 'UTF-8')
+```
+
+```{r}
+prep_fun <- tolower
+tok_fun <- word_tokenizer
+train <- sample_frac(df, .9)
+test <- anti_join(df, train)
+
+it_train <- itoken(train$review,
+                   n_chunks = 10,
+                   tokenizer = tok_fun,
+                   ids = df$X1,
+                   progressbar = TRUE)
+vocab = create_vocabulary(it_train)
+```
+
+```{r}
+vectorizer = vocab_vectorizer(vocab)
+dtm_train = create_dtm(it_train, vectorizer)
+```
+
+```{r}
+NFOLDS <- 10
+glmnet_classifier <- cv.glmnet(x = dtm_train, y = train[['score']], 
+                              # L1 penalty
+                              alpha = 1,
+                              # interested in the area under ROC curve
+                              type.measure = "mse",
+                              # 5-fold cross-validation
+                              nfolds = NFOLDS,
+                              # high value is less accurate, but has faster training
+                              thresh = 1e-3,
+                              # again lower number of iterations for faster training
+                              maxit = 1e3)
+
+```
+
+Lambda is just a tuning parameter that we are trying to optimize. It's a measure that controls the strength of the elastic net penalty. See page 2 here:
+https://cran.r-project.org/web/packages/glmnet/vignettes/glmnet.pdf
+```{r}
+print(paste("max AUC =", round(max(glmnet_classifier$cvm), 4)))
+plot(glmnet_classifier)
+```
+
+```{r}
+it_test = tok_fun(prep_fun(test$review))
+it_test = itoken(it_test, ids = test$X1, 
+                 progressbar = FALSE)
+
+dtm_test = create_dtm(it_test, vectorizer)
+
+preds = predict(glmnet_classifier, dtm_test, type = 'response')[,1]
+glmnet:::auc(test$score, preds)
+```

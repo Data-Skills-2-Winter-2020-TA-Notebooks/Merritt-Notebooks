@@ -26,7 +26,7 @@ sentiment_analysis <- function(p_tags, sentiments){
     sentiment_means[iterator] = as.numeric(mean(line_sentiments$value, na.rm = TRUE)[[1]])
     iterator = iterator + 1
   }
-  mean(sentiment_means, na.rm = TRUE)
+  return(mean(sentiment_means, na.rm = TRUE))
       # if (iterator > 3){
       #   stop()
       # }
